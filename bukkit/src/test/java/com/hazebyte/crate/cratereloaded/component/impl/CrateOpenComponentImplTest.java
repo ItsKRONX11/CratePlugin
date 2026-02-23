@@ -24,7 +24,7 @@ public class CrateOpenComponentImplTest extends BukkitTest {
 
     @BeforeAll
     public static void setupRewardExecutor() {
-        GivePlayerItemsComponent givePlayerItemsComponent = new GivePlayerItemsComponentImpl(plugin);
+        GivePlayerItemsComponent givePlayerItemsComponent = new GivePlayerItemsComponentImpl(plugin, plugin.getSettings());
         rewardExecutor = new OpenCrateComponentImpl(plugin, givePlayerItemsComponent);
     }
 

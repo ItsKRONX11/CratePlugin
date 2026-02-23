@@ -328,6 +328,7 @@ public class CorePlugin extends JavaPlugin implements CratePlugin {
      *   <li>Marks the plugin as ready</li>
      * </ul>
      */
+
     public void onEnable() {
         // Set up plugin instance and API implementation
         plugin = this;

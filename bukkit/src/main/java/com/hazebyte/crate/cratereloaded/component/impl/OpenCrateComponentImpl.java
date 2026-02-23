@@ -11,6 +11,9 @@ import com.hazebyte.crate.cratereloaded.component.GivePlayerItemsComponent;
 import com.hazebyte.crate.cratereloaded.component.OpenCrateComponent;
 import com.hazebyte.crate.cratereloaded.component.model.CrateOpenRequest;
 import com.hazebyte.crate.cratereloaded.component.model.CrateOpenResponse;
+import com.hazebyte.crate.cratereloaded.crate.animation.end.BlankEnding;
+import com.hazebyte.crate.cratereloaded.crate.animation.end.RandomEnding;
+import com.hazebyte.crate.cratereloaded.crate.animation.scroller.Csgo;
 import com.hazebyte.crate.cratereloaded.crate.animationV2.Animation;
 import com.hazebyte.crate.cratereloaded.crate.animationV2.prebuilt.CsgoAnimationGenerator;
 import com.hazebyte.crate.cratereloaded.crate.animationV2.prebuilt.RouletteAnimationGenerator;
@@ -33,6 +36,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.checkerframework.checker.units.qual.C;
 
 public class OpenCrateComponentImpl implements OpenCrateComponent {
 
@@ -50,6 +54,7 @@ public class OpenCrateComponentImpl implements OpenCrateComponent {
         CrateV2 crateV2 = request.getCrateV2OrConvert();
 
         // Animation V2 (native CrateV2 usage!)
+
         if (crateV2.getAnimationType() != null && crateV2.getAnimationType() == AnimationType.ROULETTE_V2) {
             Animation animation = new RouletteAnimationGenerator().createAnimation(request.getPlayer(), crateV2);
             CorePlugin.getJavaPluginComponent().getAnimationManager().startAnimation(animation);
@@ -58,9 +63,10 @@ public class OpenCrateComponentImpl implements OpenCrateComponent {
             Animation animation = new CsgoAnimationGenerator().createAnimation(request.getPlayer(), crateV2);
             CorePlugin.getJavaPluginComponent().getAnimationManager().startAnimation(animation);
             return CrateOpenResponse.builder().build();
-        } else if (crateV2.getAnimation() != null) {
+        } else if (crateV2.getAnimationType() != null && crateV2.getAnimationType() != AnimationType.NONE) {
             // Legacy animation - need CrateImpl
             CrateImpl crate = CorePlugin.CRATE_MAPPER.toImplementation(crateV2);
+            crate.getAnimation().setEnding(new BlankEnding(crate, plugin.getSettings()));
             Inventory inventory = crate.getAnimation().open(request.getPlayer(), request.getLocation());
             if (inventory == null) {
                 Messenger.warning(String.format(

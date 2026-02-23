@@ -31,7 +31,7 @@ public class ClaimButton extends Button {
         Reward reward = claim.getRewards().get(0);
 
         if (reward != null) {
-            item = reward.getDisplayItem();
+            item = reward.getDisplayItem(claim.getOwner() instanceof Player player ? player : null);
         } else {
             item = ItemBuilder.of(Mat.RED_WOOL.toItemStack())
                     .displayName("Claim Reward")

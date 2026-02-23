@@ -22,7 +22,7 @@ public class RewardSerialization {
 
         Map<String, Object> serialized = new HashMap<>();
         RewardImpl impl = (RewardImpl) reward;
-        serialized.put(Tag.CHANCE.getName(), impl.getChance());
+        serialized.put(Tag.CHANCE.getName(), impl.getChanceRaw());
         serialized.put(Tag.DISPLAY.getName(), impl.getModel().getDisplayItem());
         serialized.put(Tag.ITEM.getName(), impl.getItems());
         serialized.put(Tag.COMMAND.getName(), impl.getCommands());

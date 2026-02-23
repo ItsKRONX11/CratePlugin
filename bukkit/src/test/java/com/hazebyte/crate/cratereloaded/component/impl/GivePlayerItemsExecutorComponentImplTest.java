@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 public class GivePlayerItemsExecutorComponentImplTest extends BukkitTest {
 
-    private GivePlayerItemsComponentImpl executor = new GivePlayerItemsComponentImpl(plugin);
+    private GivePlayerItemsComponentImpl executor = new GivePlayerItemsComponentImpl(plugin, plugin.getSettings());
 
     private static ItemStack oneItem = new ItemStack(Material.STONE, 1);
     private static ItemStack oneInventory = new ItemStack(Material.STONE, 64 * ItemConstants.SLOTS_IN_INVENTORY);

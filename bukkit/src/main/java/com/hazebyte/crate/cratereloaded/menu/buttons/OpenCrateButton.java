@@ -37,7 +37,7 @@ public class OpenCrateButton extends Button {
         if (CrateHandler.getInstance().isCrate(item) && crate.is(item)) {
             CorePlugin.getPlugin().getCrateRegistrar().open(crate, player, location);
         } else {
-            Messenger.tell(player, CustomFormat.format(CorePlugin.getPlugin().getMessage("core.invalid_crate"), crate));
+            Messenger.tell(player, CustomFormat.format(CorePlugin.getPlugin().getMessage("core.invalid_crate"), player, crate));
         }
         event.setWillClose(true);
     }

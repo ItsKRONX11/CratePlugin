@@ -36,7 +36,7 @@ public class CrateOpenRequest {
             return crateV2;
         }
         if (crate != null) {
-            return CorePlugin.CRATE_MAPPER.fromImplementation((CrateImpl) crate);
+            CrateImpl impl = (CrateImpl) crate;
         }
         throw new IllegalStateException("CrateOpenRequest must have either crate or crateV2 set");
     }

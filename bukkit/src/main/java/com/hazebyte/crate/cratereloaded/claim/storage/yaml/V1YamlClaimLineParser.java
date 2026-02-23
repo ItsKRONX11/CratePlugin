@@ -50,6 +50,7 @@ public class V1YamlClaimLineParser implements YamlClaimLineParser {
                 .rewards(rewards)
                 .executor(claimExecutor)
                 .build();
+
         claim.setTimestamp(timestamp);
         return claim;
     }

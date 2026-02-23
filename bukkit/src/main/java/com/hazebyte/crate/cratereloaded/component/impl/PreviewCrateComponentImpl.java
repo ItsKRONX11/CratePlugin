@@ -25,7 +25,7 @@ public class PreviewCrateComponentImpl implements PreviewCrateComponent {
     public void previewCrate(Crate crate, Player player) {
         boolean buttonsEnabled = settings.isMenuInteractionEnabled();
         int slots = crate.getPreviewSlots() + (buttonsEnabled ? Grid.ROWS : 0);
-        CratePreviewPage page = new CratePreviewPage(crate, Size.fit(slots), settings);
+        CratePreviewPage page = new CratePreviewPage(player, crate, Size.fit(slots), settings);
         page.open(player);
     }
 }

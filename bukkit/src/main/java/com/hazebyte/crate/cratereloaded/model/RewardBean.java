@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 public class RewardBean {
     private int slot;
 
-    private double chance;
+    private String chanceRaw = "0.0";
 
     @NonNull
     private ItemStack displayItem;

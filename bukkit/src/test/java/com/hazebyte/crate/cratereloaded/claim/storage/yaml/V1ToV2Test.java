@@ -11,6 +11,8 @@ import com.hazebyte.crate.api.claim.Claim;
 import com.hazebyte.crate.cratereloaded.claim.ClaimExecutor;
 import com.hazebyte.crate.cratereloaded.component.OpenCrateComponent;
 import com.hazebyte.crate.cratereloaded.model.Config;
+
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -39,7 +41,7 @@ public class V1ToV2Test extends BukkitTest {
     }
 
     @Test
-    public void integrationTest() {
+    public void integrationTest() throws IOException {
         YamlClaimStorage storage = new YamlClaimStorage(plugin, claimExecutor);
         YamlClaimLineParser parser = new V1YamlClaimLineParser(claimExecutor);
         Config config = storage.getConfig(playerMock);

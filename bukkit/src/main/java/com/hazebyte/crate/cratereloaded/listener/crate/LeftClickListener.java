@@ -33,8 +33,8 @@ public class LeftClickListener implements Listener {
         Player player = event.getPlayer();
         List<Crate> crates = blockHandler.getCrates(event.getLocation());
 
-        if (crates != null && crates.size() > 0) {
-            if (!event.isCancelled() && crate.isPreviewable()) {
+        if (crates != null && !crates.isEmpty()) {
+            if (crate.isPreviewable()) {
                 crateHandler.previewAll(crates, player);
                 blockHandler
                         .getFirstCrate(event.getLocation())

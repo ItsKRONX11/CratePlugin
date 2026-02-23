@@ -219,4 +219,8 @@ public abstract class Animation {
     public void removePlayerFromOpening(Player player) {
         players.remove(player.getUniqueId().toString());
     }
+
+    public Ending getEnding() {
+        return this.ending;
+    }
 }

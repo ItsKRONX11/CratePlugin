@@ -42,7 +42,7 @@ public class CrateBuilder {
     private List<String> broadcast;
 
     // Preview
-    private boolean previewEnabled;
+    private boolean previewEnabled = true;
     private int rows = 0;
 
     // Reward Options

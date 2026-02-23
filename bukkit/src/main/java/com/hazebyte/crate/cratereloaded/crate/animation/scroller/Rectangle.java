@@ -118,7 +118,7 @@ public class Rectangle extends BaseScroller {
             // Set the Wheel
             int counter = 0;
             for (int current : scrollPath) {
-                contents[current] = rewards.get(counter).getDisplayItem();
+                contents[current] = rewards.get(counter).getDisplayItem(player);
                 pathMapping.put(current, rewards.get(counter));
                 counter++;
             }
@@ -161,7 +161,7 @@ public class Rectangle extends BaseScroller {
 
             int nextSpinnerLocation = scrollPath.get(index + 1);
 
-            inventory.setItem(spinnerLocation, pathMapping.get(spinnerLocation).getDisplayItem());
+            inventory.setItem(spinnerLocation, pathMapping.get(spinnerLocation).getDisplayItem(player));
             inventory.setItem(nextSpinnerLocation, spinner);
 
             spinnerLocation = nextSpinnerLocation;

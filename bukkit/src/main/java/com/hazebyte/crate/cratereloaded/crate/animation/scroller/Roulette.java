@@ -75,7 +75,7 @@ public class Roulette extends BaseScroller {
         public void update(Player player, Inventory inventory, List<Reward> rewards) {
             crate.runEffect(location, Category.ANIMATION, player);
             Reward reward = rewards.get(iterations);
-            ItemStack display = reward.getDisplayItem();
+            ItemStack display = reward.getDisplayItem(player);
             inventory.setItem(InventoryConstants.CENTER_SLOT_THREE_ROWS, display);
             fillEmptySlots(inventory);
         }

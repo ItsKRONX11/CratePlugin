@@ -413,7 +413,7 @@ public class CrateHandler implements CrateRegistrar {
                         + (settings.isMenuInteractionEnabled()
                                 ? Size.ONE_LINE.getSize()
                                 : 0);
-                CratesPreviewPage page = new CratesPreviewPage(crates, Size.fit(size), settings);
+                CratesPreviewPage page = new CratesPreviewPage(player, crates, Size.fit(size), settings);
                 page.open(player);
             }
         }

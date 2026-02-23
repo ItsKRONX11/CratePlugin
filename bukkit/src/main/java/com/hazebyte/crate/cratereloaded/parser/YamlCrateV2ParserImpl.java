@@ -140,7 +140,7 @@ public class YamlCrateV2ParserImpl {
                     .openMessage(parseOpenMessage(section))
                     .broadcastMessage(parseBroadcastMessage(section))
                     .previewRows(section.getInt(PREVIEW_ROWS, 3))
-                    .confirmBeforeUse(section.getBoolean(CONFIRMATION_ENABLED, false))
+                    .confirmBeforeUse(section.getBoolean(CONFIRMATION_ENABLED, true))
                     .acceptButton(parseAcceptButton(section))
                     .declineButton(parseDeclineButton(section))
                     .minimumRewards(section.getInt(REWARD_MINIMUM_REWARDS, 1))

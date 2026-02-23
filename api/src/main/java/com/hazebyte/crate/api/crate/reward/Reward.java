@@ -49,9 +49,8 @@ public interface Reward extends PluginSerializable {
      * specified by {@link Reward#getPermissions()}
      *
      * @param player the player to check
-     * @return true if the player has any permission, false otherwise
+     * @return true if the player has any non-negated permission, or if they don't have any negated permission (negated -> starting with !)
      */
-    @Deprecated
     boolean hasPermission(Player player);
 
     /**
@@ -79,7 +78,9 @@ public interface Reward extends PluginSerializable {
      *
      * @return chance
      */
-    double getChance();
+    double getChance(Player player);
+
+    String getChanceRaw();
 
     /**
      * Sets the chance to a double representation.
@@ -87,14 +88,14 @@ public interface Reward extends PluginSerializable {
      *
      * @param chance the chance to set.
      */
-    void setChance(double chance);
+    void setChanceRaw(String chance);
 
     /**
      * Returns the display item.
      *
      * @return the display item if non-null, otherwise null.
      */
-    ItemStack getDisplayItem();
+    ItemStack getDisplayItem(Player player);
 
     /**
      * Sets the display item.

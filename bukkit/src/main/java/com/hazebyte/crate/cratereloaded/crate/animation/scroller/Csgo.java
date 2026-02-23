@@ -9,6 +9,7 @@ import com.hazebyte.crate.cratereloaded.crate.animation.AnimationTask;
 import com.hazebyte.crate.cratereloaded.crate.animation.BaseScroller;
 import java.util.List;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -41,7 +42,7 @@ public class Csgo extends BaseScroller {
     protected void initialize(Inventory inventory, Player player) {
         List<Reward> rewards = getRewards(player, 6);
         for (int i = 0; i < rewards.size(); i++) {
-            inventory.setItem(10 + i, rewards.get(i).getDisplayItem());
+            inventory.setItem(10 + i, rewards.get(i).getDisplayItem(player));
         }
 
         ItemStack topDisplay = settings.getCSGOAnimationTopRowItem();
@@ -49,6 +50,8 @@ public class Csgo extends BaseScroller {
 
         inventory.setItem(4, topDisplay);
         inventory.setItem(22, botDisplay);
+
+        player.playSound(player.getLocation(), Sound.ENTITY_BAT_TAKEOFF, 1.0f, 1.0f);
     }
 
     public class CsgoTask extends AnimationTask {
@@ -89,7 +92,7 @@ public class Csgo extends BaseScroller {
             shift(inventory);
 
             Reward reward = rewards.get(iterations);
-            ItemStack display = reward.getDisplayItem();
+            ItemStack display = reward.getDisplayItem(player);
             inventory.setItem(10, display);
             fillEmptySlots(inventory);
         }
@@ -98,6 +101,7 @@ public class Csgo extends BaseScroller {
             for (int i = 16; i >= 10; i--) {
                 inventory.setItem(i, inventory.getItem(i - 1));
             }
+            player.playSound(player.getLocation(), Sound.BLOCK_WOOD_PLACE, 1.0f, 1.0f);
         }
     }
 }

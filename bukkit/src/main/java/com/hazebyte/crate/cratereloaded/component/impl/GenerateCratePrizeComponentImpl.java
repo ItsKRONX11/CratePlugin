@@ -5,7 +5,7 @@ import com.hazebyte.crate.api.crate.reward.Reward;
 import com.hazebyte.crate.cratereloaded.CorePlugin;
 import com.hazebyte.crate.cratereloaded.component.GenerateCratePrizeComponent;
 import com.hazebyte.crate.cratereloaded.component.RewardServiceComponent;
-import com.hazebyte.crate.cratereloaded.crate.generator.rules.PermissionNotAllowedRule;
+import com.hazebyte.crate.cratereloaded.crate.generator.rules.PermissionRule;
 import com.hazebyte.crate.cratereloaded.crate.generator.rules.RewardHasChanceRule;
 import com.hazebyte.crate.cratereloaded.crate.generator.rules.UniqueRewardRule;
 import com.hazebyte.crate.cratereloaded.model.CrateV2;
@@ -44,8 +44,8 @@ public class GenerateCratePrizeComponentImpl implements GenerateCratePrizeCompon
 
         while (winnings.size() < expectedNumberOfRewards) {
             List<Predicate<Reward>> rules = new ArrayList<>();
-            rules.add(new PermissionNotAllowedRule(player));
-            rules.add(new RewardHasChanceRule());
+            rules.add(new PermissionRule(player));
+            rules.add(new RewardHasChanceRule(player));
             if (!overrideUniqueRule) {
                 rules.add(new UniqueRewardRule(winnings));
             }
@@ -59,7 +59,7 @@ public class GenerateCratePrizeComponentImpl implements GenerateCratePrizeCompon
                 break;
             }
 
-            Reward reward = generateRewardComponent.generatePrize(prizePool);
+            Reward reward = generateRewardComponent.generatePrize(player, prizePool);
             winnings.add(reward);
         }
 
@@ -69,11 +69,10 @@ public class GenerateCratePrizeComponentImpl implements GenerateCratePrizeCompon
     @Override
     public RewardV2 generateRewardForAnimation(Player player, CrateV2 crateV2) {
         List<Predicate<RewardV2>> rules = new ArrayList<>();
-        rules.add(reward ->
-                reward.getExclusivePermissions().stream().allMatch(permission -> player.hasPermission(permission)));
-        rules.add(reward -> reward.getChance() > 0);
+        rules.add(reward -> reward.hasPermission(player));
+        rules.add(reward -> reward.getChance(player) > 0);
         val rewardPool = generateRewardComponent.createPrizePoolV2(crateV2.getRewards(), rules);
-        val rewardV2 = generateRewardComponent.generatePrizeV2(rewardPool);
+        val rewardV2 = generateRewardComponent.generatePrizeV2(player, rewardPool);
         return rewardV2;
     }
 

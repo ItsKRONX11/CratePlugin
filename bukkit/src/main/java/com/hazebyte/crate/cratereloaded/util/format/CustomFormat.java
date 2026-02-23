@@ -3,8 +3,13 @@ package com.hazebyte.crate.cratereloaded.util.format;
 import com.hazebyte.crate.api.crate.Crate;
 import com.hazebyte.crate.api.crate.reward.Reward;
 import com.hazebyte.crate.cratereloaded.model.CrateV2;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class CustomFormat {
@@ -23,6 +28,14 @@ public class CustomFormat {
         String formatted = message;
         Format format = new DefaultFormat(formatted);
         formatted = format.format(null);
+        Player player = null;
+        for (Object object : arguments) {
+            if (object instanceof Player) {
+                player = (Player) object;
+                break;
+            }
+        }
+
         for (Object object : arguments) {
             if (object == null) {
                 continue;
@@ -35,7 +48,8 @@ public class CustomFormat {
             } else if ((object instanceof OfflinePlayer)) {
                 format = new PlayerFormat(formatted);
             } else if (object instanceof Reward || isTypeOfList(object, Reward.class)) {
-                format = new RewardFormat(formatted);
+                formatted = new RewardFormat(formatted).format(player, object);
+                continue;
             } else if (object instanceof Double) {
                 format = new DoubleFormat(formatted);
             } else if (object instanceof Integer) {

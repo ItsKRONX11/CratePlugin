@@ -40,18 +40,13 @@ import com.hazebyte.crate.cratereloaded.component.impl.SupplyChestCreateComponen
 import com.hazebyte.crate.cratereloaded.crate.BlockCrateHandler;
 import com.hazebyte.crate.cratereloaded.crate.CrateHandler;
 import com.hazebyte.crate.cratereloaded.crate.animationV2.AnimationManager;
-import com.hazebyte.crate.cratereloaded.listener.ListenerManager;
 import com.hazebyte.crate.cratereloaded.menuV2.InventoryHistoryManager;
 import com.hazebyte.crate.cratereloaded.menuV2.InventoryManager;
-import com.hazebyte.crate.cratereloaded.menuV2.InventoryManagerListener;
 import com.hazebyte.crate.cratereloaded.model.Config;
 import com.hazebyte.crate.cratereloaded.parser.RewardV2Parser;
 import com.hazebyte.crate.cratereloaded.parser.YamlCrateV2ParserImpl;
 import com.hazebyte.crate.cratereloaded.util.ConfigConstants;
 import com.hazebyte.crate.cratereloaded.validation.CrateValidatorImpl;
-import com.hazebyte.crate.cratereloaded.validation.RewardValidatorImpl;
-import com.hazebyte.crate.validation.CrateValidator;
-import com.hazebyte.crate.validation.RewardValidator;
 import dagger.Module;
 import dagger.Provides;
 import java.io.File;
@@ -238,11 +233,5 @@ public class ComponentModule {
     @Singleton
     public CrateValidatorImpl provideCrateValidator() {
         return new CrateValidatorImpl();
-    }
-
-    @Provides
-    @Singleton
-    public RewardValidatorImpl provideRewardValidator() {
-        return new RewardValidatorImpl();
     }
 }

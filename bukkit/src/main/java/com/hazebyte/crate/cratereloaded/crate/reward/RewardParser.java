@@ -59,14 +59,8 @@ public class RewardParser {
                 }
 
                 case CHANCE: {
-                    String str = values.get(0);
-                    if (StringUtils.isDouble(str)) {
-                        reward.setChance(Double.parseDouble(str));
-                        break;
-                    }
-                    reward.setChance(0);
-                    throw new ValidationException(
-                            String.format("The following tag, CHANCE, is not a number: [%s]", str));
+                    reward.setChanceRaw(values.get(0));
+                    break;
                 }
 
                 case DISPLAY: {

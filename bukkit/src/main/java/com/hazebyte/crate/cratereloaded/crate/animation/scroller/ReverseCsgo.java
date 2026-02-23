@@ -57,7 +57,7 @@ public class ReverseCsgo extends Csgo {
             shift(inventory);
 
             Reward reward = rewards.get(iterations);
-            ItemStack display = reward.getDisplayItem();
+            ItemStack display = reward.getDisplayItem(player);
             inventory.setItem(16, display);
             fillEmptySlots(inventory);
         }

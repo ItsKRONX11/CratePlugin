@@ -16,6 +16,7 @@ public class RewardFactory {
         }
 
         Reward reward = new RewardImpl();
+        reward.setParent(crate);
 
         String command = String.format("/crate give to %s %s %d", player.getName(), crate.getCrateName(), amount);
 

@@ -62,7 +62,7 @@ public class BlankWheelEnding extends BlankEnding {
             ItemStack glass = getDisplay();
             for (int i = 0; i < contents.length; i++) {
                 if (i == 22) {
-                    contents[i] = rewards.get(0).getDisplayItem();
+                    contents[i] = rewards.get(0).getDisplayItem(player);
                 } else {
                     contents[i] = glass;
                 }

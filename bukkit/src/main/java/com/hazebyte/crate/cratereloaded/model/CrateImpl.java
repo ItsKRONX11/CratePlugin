@@ -92,7 +92,7 @@ public class CrateImpl implements Crate {
     private List<String> broadcastMessage;
 
     // Whether is crate is previewable
-    private boolean previewable;
+    private boolean previewable = true;
 
     // The number of previewable rows
     private int previewRows = 0;
@@ -234,7 +234,7 @@ public class CrateImpl implements Crate {
     @Override
     public void setEndAnimationType(EndAnimationType type) {
         this.endAnimationType = type;
-        if (this.endAnimationType == null) {
+        if (type == null) {
             this.endAnimationType = EndAnimationType.BLANK;
         }
         if (animation != null) {
@@ -392,7 +392,8 @@ public class CrateImpl implements Crate {
     }
 
     public void setAnimation(Animation animation) {
-        this.animation = animation;
+        if (animation != null)
+            this.animation = animation;
     }
 
     public void setMinimumRewards(int min) {
@@ -412,6 +413,9 @@ public class CrateImpl implements Crate {
     public List<Reward> getRewards() {
         if (this.rewards == null) {
             this.rewards = new ArrayList<>();
+        }
+        for (Reward reward : rewards) {
+            reward.setParent(this);
         }
         return this.rewards;
     }

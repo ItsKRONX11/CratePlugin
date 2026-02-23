@@ -7,6 +7,8 @@ import com.hazebyte.crate.cratereloaded.util.MoreObjects;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,16 +23,20 @@ public class RewardFormat extends Format {
 
     @Override
     public String format(Object object) {
+        return format(null, object);
+    }
+
+    public String format(Player player, Object object) {
         if (object instanceof Reward) {
-            return format((Reward) object);
+            return format(player, (Reward) object);
         }
         if (object instanceof List) {
-            return format((List) object);
+            return format(player, (List) object);
         }
         return message;
     }
 
-    public String format(@NotNull Reward reward) {
+    public String format(Player player, @NotNull Reward reward) {
         if (!(reward instanceof RewardImpl)) { // It is a legacy reward.
             return message;
         }
@@ -43,30 +49,35 @@ public class RewardFormat extends Format {
         }
 
         if (reward.getParent() != null) {
-            double totalChance = reward.getParent().getRewards().stream()
-                    .map(r -> r.getChance())
-                    .reduce(0.0, (a, b) -> a + b);
-            double chance = (reward.getChance() / totalChance) * 100;
-            String chanceString = String.format("%s%%", format.format(chance));
-            message = message.replace("{chance}", chanceString);
+            if (player != null) {
+                double totalChance = reward.getParent().getRewards().stream()
+                        .filter(r -> r.hasPermission(player))
+                        .map(r -> r.getChance(player))
+                        .reduce(0.0, Double::sum);
+                double chance = (reward.getChance(player) / totalChance) * 100;
+                String chanceString = String.format("%s%%", format.format(chance));
+                message = message.replace("{chance}", chanceString)
+                        .replace("{raw-chance}", Double.toString(chance));
+            } else {
+                message = message.replace("{chance}", "Player Needed")
+                        .replace("{raw-chance}", "Player Needed");
+            }
             CrateFormat crateFormat = new CrateFormat(message);
             message = crateFormat.format(reward.getParent());
         }
-
-        message = message.replace("{raw-chance}", format.format(reward.getChance()));
         return message;
     }
 
-    public String format(List<Reward> rewards) {
+    public String format(Player player, List<Reward> rewards) {
         Reward firstReward = MoreObjects.firstNonNull(rewards);
 
         List<ItemStack> displayItems = new ArrayList<>();
         for (Reward reward : rewards) {
-            displayItems.add(reward.getDisplayItem());
+            displayItems.add(reward.getDisplayItem(player));
         }
 
         message = CustomFormat.format(message, displayItems);
-        message = format(firstReward);
+        message = format(player, firstReward);
         return message;
     }
 }

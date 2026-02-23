@@ -69,6 +69,7 @@ public class RewardV2Parser {
             RewardImpl rewardImpl = new RewardImpl(rewardString);
             return CorePlugin.REWARD_MAPPER.fromImplementation(rewardImpl);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ValidationException("Failed to parse legacy reward string: " + e.getMessage());
         }
     }
@@ -106,7 +107,7 @@ public class RewardV2Parser {
     private RewardV2 parseRewardFromSection(@NonNull ConfigurationSection section) {
         return RewardV2.builder()
                 .displayItem(parseOptionalDisplayItem(section))
-                .chance(section.getDouble("chance", 0.0))
+                .chanceRaw(section.getString("chance", "0.0"))
                 .items(parseItems(section))
                 .commands(parseCommands(section))
                 .exclusivePermissions(section.getStringList("exclusive-permissions"))

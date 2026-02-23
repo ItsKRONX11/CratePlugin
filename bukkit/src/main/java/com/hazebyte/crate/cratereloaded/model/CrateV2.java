@@ -43,7 +43,7 @@ public class CrateV2 {
 
     @NonNull
     @Builder.Default
-    private AnimationType animationType = AnimationType.NONE;
+    private AnimationType animationType = AnimationType.CSGO;
 
     @NonNull
     @Builder.Default

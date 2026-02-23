@@ -14,12 +14,12 @@ import com.hazebyte.crate.cratereloaded.util.MoreObjects;
 import com.hazebyte.crate.cratereloaded.util.format.CustomFormat;
 import com.hazebyte.crate.cratereloaded.util.format.ItemFormatter;
 import com.hazebyte.util.Mat;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
+
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -93,12 +93,16 @@ public class RewardImpl implements Reward {
     @Override
     public boolean hasPermission(Player player) {
         for (String permission : model.getPermissions()) {
-            if (player.hasPermission(permission)) {
-                return true;
+            boolean negated = permission.startsWith("!");
+            String node = negated ? permission.substring(1) : permission;
+
+            if (negated) {
+                if (player.hasPermission(node)) return false;
+            } else {
+                if (!player.hasPermission(node)) return false;
             }
         }
-
-        return false;
+        return true;
     }
 
     @Override
@@ -126,24 +130,35 @@ public class RewardImpl implements Reward {
     }
 
     @Override
-    public double getChance() {
-        return model.getChance();
+    public double getChance(Player player) {
+        String changeRaw = getChanceRaw();
+        String parsed = PlaceholderAPI.setPlaceholders(player, changeRaw);
+        double d = Double.parseDouble(parsed);
+        return d;
     }
 
     @Override
-    public void setChance(double chance) {
-        if (chance < 0) {
-            chance = 0;
-        }
-        model.setChance(chance);
+    public String getChanceRaw() {
+        return model.getChanceRaw();
     }
 
     @Override
-    public ItemStack getDisplayItem() {
+    public void setChanceRaw(String chance) {
+        model.setChanceRaw(chance);
+    }
+
+    @Override
+    public ItemStack getDisplayItem(Player player) {
         Objects.requireNonNull(model.getDisplayItem());
         ItemStack cloned = model.getDisplayItem().clone(); // defensive copying
-        ItemFormatter.format(cloned, this);
+        ItemFormatter.format(cloned, player, this);
         return cloned;
+    }
+
+    public ItemStack getDisplayItem() {
+        Objects.requireNonNull(model.getDisplayItem());
+        // defensive copying
+        return model.getDisplayItem().clone();
     }
 
     @Override
@@ -202,13 +217,14 @@ public class RewardImpl implements Reward {
     @Override
     public List<String> getCommands() {
         return model.getCommands().stream()
-                .map(cmd -> CustomFormat.format(cmd, this))
+                .map(cmd -> CustomFormat.format(cmd, crate, this))
                 .collect(Collectors.toList());
     }
 
     public List<String> getCommands(Player player) {
         return this.getCommands().stream()
-                .map(cmd -> CustomFormat.format(cmd, player))
+                .map(cmd -> CustomFormat.format(cmd, player, this, crate))
+                .map(cmd -> PlaceholderAPI.setPlaceholders(player, cmd))
                 .collect(Collectors.toList());
     }
 
@@ -239,8 +255,8 @@ public class RewardImpl implements Reward {
 
     @Override
     public boolean hasPostParsing() {
-        return this.line.getRewardString().contains("{random:")
-                || this.line.getRewardString().contains("{random-similar:");
+        return this.getLine().getRewardString().contains("{random:")
+                || this.getLine().getRewardString().contains("{random-similar:");
     }
 
     @Override
@@ -277,12 +293,14 @@ public class RewardImpl implements Reward {
     public void runMessage(Player player) {
         this.getBroadcastMessage().stream()
                 .filter(s -> !Strings.isNullOrEmpty(s))
-                .map(s -> CustomFormat.format(s, player, this))
+                .map(s -> CustomFormat.format(s, player, this, crate))
+                .map(s -> PlaceholderAPI.setPlaceholders(player, s))
                 .forEach(Messenger::broadcast);
 
         this.getOpenMessage().stream()
                 .filter(s -> !Strings.isNullOrEmpty(s))
-                .map(s -> CustomFormat.format(s, player, this))
+                .map(s -> CustomFormat.format(s, player, this, crate))
+                .map(s -> PlaceholderAPI.setPlaceholders(player, s))
                 .forEach(s -> Messenger.tell(player, s));
     }
 

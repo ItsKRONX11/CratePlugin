@@ -2,8 +2,10 @@ package com.hazebyte.crate.cratereloaded.model.mapper;
 
 import com.hazebyte.crate.cratereloaded.model.CrateImpl;
 import com.hazebyte.crate.cratereloaded.model.CrateV2;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(uses = {RewardMapper.class, CommonMapperUtil.class})
 public interface CrateMapper {
@@ -23,4 +25,12 @@ public interface CrateMapper {
     @Mapping(target = "displayItem", qualifiedByName = "unwrap")
     @Mapping(target = "displayName", qualifiedByName = "unwrap")
     CrateImpl toImplementation(CrateV2 crateV2);
+
+    @BeforeMapping
+    default void setManually(CrateV2 source, @MappingTarget CrateImpl target) {
+        target.setAnimationType(source.getAnimationType());
+        target.setConfirmationToggle(source.isConfirmBeforeUse());
+        target.setAcceptButton(source.getAcceptButton());
+        target.setDeclineButton(source.getDeclineButton());
+    }
 }
